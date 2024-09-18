@@ -1,14 +1,15 @@
 <script>
 	/** @type {import('./$types').PageData} */
 	export let data;
-	console.log(data);
 
+	import { focusTrap } from '@skeletonlabs/skeleton';
 	import { DataHandler, Search, RowsPerPage, RowCount, Pagination } from '@vincjo/datatables';
 	import { config } from '$lib/config';
 	console.log('CONFIG: ' + config);
 	const handler = new DataHandler(data.loans, { rowsPerPage: config.rowsPerPage });
 	const rows = handler.getRows();
 	let isFocused = true;
+	let searchString;
 </script>
 
 <h2>Fetching Balances for {data.params.account_id}</h2>
@@ -16,7 +17,17 @@
 <!-- Responsive Container (recommended) -->
 <div class="table-container">
 	<header class="flex justify-between gap-4">
-		<div><Search {handler} class="p-3 m-3" /></div>
+		<div use:focusTrap={isFocused}>
+			<div class="p-3 m-3">
+				<input
+					class="input w-full variant-soft-tertiary"
+					type="search"
+					placeholder="Search..."
+					bind:value={searchString}
+					on:input={() => handler.search(searchString)}
+				/>
+			</div>
+		</div>
 	</header>
 	<!-- Native Table Element -->
 	<table class="table table-hover">
