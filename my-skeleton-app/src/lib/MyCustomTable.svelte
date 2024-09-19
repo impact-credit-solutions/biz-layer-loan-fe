@@ -40,7 +40,7 @@
 		<tbody>
 			{#each $rows as row}
 				<tr>
-					<td><a href="/balances/{row.id}">{row.id}</a></td>
+					<td><a href="/details/{row.id}">{row.id}</a></td>
 					<td>{row.name}</td>
 					<td
 						><Accordion>
@@ -64,8 +64,9 @@
 		<tfoot>
 			<tr>
 				<td><RowCount {handler} /> </td>
-				<td><RowsPerPage {handler} /></td>
 				<td> <Pagination {handler}></Pagination></td>
+				<td><RowsPerPage {handler} /></td>
+			
 				<!-- <td>haha</td> -->
 			</tr>
 		</tfoot>
