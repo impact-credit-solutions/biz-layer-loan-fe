@@ -57,7 +57,7 @@
 	}
 </script>
 
-<div class="flex justify-center">
+<div class="flex flex-col justify-center items-center h-full">
 	<div class="card variant-primary m-3 p-3 flex flex-col gap-4 justify-center">
 		<div class="p-4">
 			<label class="label">

@@ -51,20 +51,16 @@
 	<AppShell>
 		<svelte:fragment slot="header">
 			<!-- App Bar -->
-			<AppBar>
-				<svelte:fragment slot="lead">
-					<strong class="text-xl uppercase">Meongg</strong>
-					<img
-						width="50"
-						class="ml-3"
-						alt="cat meow"
-						src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExNTBzajB3YzdpNzBtZWJqYXhoYzV0aGFydmF3djZzbjZvNzhmMGphciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/I9XrL9Tc1jpe/200.webp"
-					/>
-				</svelte:fragment>
-				<svelte:fragment slot="trail">
-					<LightSwitch />
-				</svelte:fragment>
-			</AppBar>
+			<div height="36">
+				<AppBar>
+					<svelte:fragment slot="lead">
+						<strong class="text-xl uppercase">Meongg</strong>
+					</svelte:fragment>
+					<svelte:fragment slot="trail">
+						<LightSwitch />
+					</svelte:fragment>
+				</AppBar>
+			</div>
 		</svelte:fragment>
 		<!-- Page Route Content -->
 		<svelte:fragment slot="sidebarLeft"
@@ -121,13 +117,14 @@
 
 		{#if isLoading}
 			<ProgressBar value={undefined} />
+			<slot />
 			<!-- <div transition:slide={{ delay: 0, duration: 2200, axis: 'x' }} class="h-full"> -->
-				<slot />
+			<!-- <slot /> -->
 			<!-- </div> -->
 		{:else}
-			<div transition:fade={{ delay: 100, duration: 1000, axis: 'x' }} class="h-full">
-				<slot />
-			</div>
+			{#key pathname}<div class="h-full" transition:slide>
+					<slot />
+				</div>{/key}
 		{/if}
 		<svelte:fragment slot="pageFooter">Page Footer</svelte:fragment></AppShell
 	>
