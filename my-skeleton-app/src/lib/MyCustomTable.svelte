@@ -13,7 +13,7 @@
 	let searchString;
 </script>
 
-<div class="table-container">
+<div class="table-container h-full">
 	<div use:focusTrap={isFocused}>
 		<div class="p-3 m-3">
 			<input
@@ -64,9 +64,11 @@
 		<tfoot>
 			<tr>
 				<td><RowCount {handler} /> </td>
-				<td> <Pagination {handler}></Pagination></td>
+				<td class="flex justify-center items-center">
+					<center><div><Pagination {handler} /></div></center></td
+				>
 				<td><RowsPerPage {handler} /></td>
-			
+
 				<!-- <td>haha</td> -->
 			</tr>
 		</tfoot>

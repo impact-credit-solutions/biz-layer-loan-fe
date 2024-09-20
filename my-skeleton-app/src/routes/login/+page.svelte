@@ -57,30 +57,27 @@
 	}
 </script>
 
-<center
-	><div class="flex justify-center h-full my-auto">
-		<div class="card variant-primary m-3 p-3 flex flex-col gap-4 justify-center">
-			<div class="p-4">
-				<label class="label">
-					<span>Username</span>
-					<input class="input" type="text" placeholder="ics-admin" bind:value={username} />
-				</label>
-			</div>
-			<div class="p-4">
-				<label class="label variant-primary">
-					<span>Password</span>
-					<input class="input" type="password" placeholder="abcde12345-" bind:value={password} />
-				</label>
-			</div>
-			<div class="p-4">
-				<button class="btn variant-filled" on:click={login} use:popup={popupFeatured}>Submit</button
-				>
-			</div>
+<div class="flex justify-center">
+	<div class="card variant-primary m-3 p-3 flex flex-col gap-4 justify-center">
+		<div class="p-4">
+			<label class="label">
+				<span>Username</span>
+				<input class="input" type="text" placeholder="ics-admin" bind:value={username} />
+			</label>
+		</div>
+		<div class="p-4">
+			<label class="label variant-primary">
+				<span>Password</span>
+				<input class="input" type="password" placeholder="abcde12345-" bind:value={password} />
+			</label>
+		</div>
+		<div class="p-4">
+			<button class="btn variant-filled" on:click={login} use:popup={popupFeatured}>Submit</button>
+		</div>
 
-			<div class="card p-4 w-72 shadow-xl" data-popup="popupFeatured">
-				<div><p>{errMsg}</p></div>
-				<div class="arrow bg-surface-100-800-token" />
-			</div>
+		<div class="card p-4 w-72 shadow-xl" data-popup="popupFeatured">
+			<div><p>{errMsg}</p></div>
+			<div class="arrow bg-surface-100-800-token" />
 		</div>
 	</div>
-</center>
+</div>
