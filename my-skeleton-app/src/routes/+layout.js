@@ -7,7 +7,7 @@ import { redirect } from '@sveltejs/kit';
 
 export const load = ({ url }) => {
 	const { pathname } = url;
-	// console.log(url)
+	// console.log(pathname)
 	// console.log(config.noLoginURL)
 	if (config.noLoginURL.indexOf(pathname)) {
 		return {

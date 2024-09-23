@@ -20,14 +20,14 @@
 	const sort = handler.getSort();
 	let isFocused = true;
 	let searchString;
-	console.log(data.loans[3]);
+	// console.log(data.loans[3]);
 </script>
 
 <div class="table-container w-full">
 	<div use:focusTrap={isFocused}>
-		<div class="p-3 m-3">
+		<div class="p-3 ">
 			<input
-				class="input w-full variant-soft-tertiary"
+				class="input w-full variant-soft-tertiary py-3 px-6"
 				type="search"
 				placeholder="Search..."
 				bind:value={searchString}

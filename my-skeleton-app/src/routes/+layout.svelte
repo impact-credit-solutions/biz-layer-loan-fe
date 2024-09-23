@@ -25,7 +25,7 @@
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 	let currentTile = 0;
 	const popupClick = {
-		event: 'hover',
+		event: 'click',
 		target: 'popupClick',
 		placement: 'right'
 	};
@@ -42,11 +42,6 @@
 	import { ProgressBar } from '@skeletonlabs/skeleton';
 	beforeNavigate(() => (isLoading = true));
 	afterNavigate(() => (isLoading = false));
-
-	
-
-
-
 </script>
 
 <!-- App Shell -->
@@ -69,10 +64,10 @@
 		</svelte:fragment>
 		<!-- Page Route Content -->
 		<svelte:fragment slot="sidebarLeft"
-			><AppRail width={sideBarOpen ? 'w-35' : 'w-30'} class=" lg:block variant-ghost ">
+			><AppRail width={sideBarOpen ? 'w-35' : 'w-30'} class="lg:block">
 				<svelte:fragment slot="lead">
 					<AppRailAnchor
-						><button class="btn variant-filled mx-1" on:click={() => (sideBarOpen = !sideBarOpen)}
+						><button class="btn mx-1" on:click={() => (sideBarOpen = !sideBarOpen)}
 							>{sideBarOpen ? 'Expand' : 'Mini'}</button
 						></AppRailAnchor
 					>
@@ -80,32 +75,25 @@
 				<!-- --- -->
 				<AppRailTile bind:group={currentTile} name="tile-1" value={0} title="tile-1">
 					<!-- <svelte:fragment slot="lead">H</svelte:fragment> -->
-					<div
-						class="flex flex-col container"
-						on:mouseenter={() => (sideBarOpen = true)}
-						on:mouseleave={() => (sideBarOpen = false)}
-					>
-						<TreeView bind:open={sideBarOpen} padding="p-0">
-							{#if sideBarOpen}
-								<div transition:fade>
-									<TreeViewItem bind:open={sideBarOpen}>
-										Loan
-										<svelte:fragment slot="children">
-											<TreeViewItem><a href="/loans/open" target="_self">Open</a></TreeViewItem>
 
-											<TreeViewItem
-												><a href="/loans/pending" target="_self">Pending</a></TreeViewItem
-											>
-										</svelte:fragment>
-									</TreeViewItem>
-								</div>
-							{:else}
-								<TreeViewItem bind:open={sideBarOpen} class="mx-auto">Loan</TreeViewItem>
-							{/if}
-						</TreeView>
-					</div>
+					<TreeView bind:open={sideBarOpen} padding="p-0">
+						{#if sideBarOpen}
+							<div transition:fade={{ duration: 500, delay: 0 }}>
+								<TreeViewItem bind:open={sideBarOpen}>
+									Loan
+									<svelte:fragment slot="children">
+										<TreeViewItem><a href="/loans/open" target="_self">Open</a></TreeViewItem>
+
+										<TreeViewItem><a href="/loans/pending" target="_self">Pending</a></TreeViewItem>
+									</svelte:fragment>
+								</TreeViewItem>
+							</div>
+						{:else}
+							<TreeViewItem bind:open={sideBarOpen} class="mx-auto">Loan</TreeViewItem>
+						{/if}
+					</TreeView>
 				</AppRailTile>
-				<!-- <AppRailTile bind:group={currentTile} name="tile-2" value={1} title="tile-2">
+				<AppRailTile bind:group={currentTile} name="tile-2" value={1} title="tile-2">
 					<svelte:fragment slot="lead">(icon)</svelte:fragment>
 					<span>Tile 2</span>
 				</AppRailTile>
@@ -116,7 +104,7 @@
 
 				<svelte:fragment slot="trail">
 					<AppRailAnchor href="/" target="_blank" title="Account">(icon)</AppRailAnchor>
-				</svelte:fragment> -->
+				</svelte:fragment>
 			</AppRail></svelte:fragment
 		>
 
@@ -127,7 +115,7 @@
 			<!-- <slot /> -->
 			<!-- </div> -->
 		{:else}
-			{#key pathname}<div class="h-full" transition:slide>
+			{#key pathname}<div class="h-full" transition:fade>
 					<slot />
 				</div>{/key}
 		{/if}
