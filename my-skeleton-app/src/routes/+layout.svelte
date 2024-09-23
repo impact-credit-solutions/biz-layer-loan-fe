@@ -42,6 +42,11 @@
 	import { ProgressBar } from '@skeletonlabs/skeleton';
 	beforeNavigate(() => (isLoading = true));
 	afterNavigate(() => (isLoading = false));
+
+	
+
+
+
 </script>
 
 <!-- App Shell -->
@@ -64,10 +69,10 @@
 		</svelte:fragment>
 		<!-- Page Route Content -->
 		<svelte:fragment slot="sidebarLeft"
-			><AppRail width={sideBarOpen ? 'w-35' : 'w-30'} class=" lg:block variant-ghost">
+			><AppRail width={sideBarOpen ? 'w-35' : 'w-30'} class=" lg:block variant-ghost ">
 				<svelte:fragment slot="lead">
 					<AppRailAnchor
-						><button class="btn variant-filled" on:click={() => (sideBarOpen = !sideBarOpen)}
+						><button class="btn variant-filled mx-1" on:click={() => (sideBarOpen = !sideBarOpen)}
 							>{sideBarOpen ? 'Expand' : 'Mini'}</button
 						></AppRailAnchor
 					>
@@ -100,7 +105,7 @@
 						</TreeView>
 					</div>
 				</AppRailTile>
-				<AppRailTile bind:group={currentTile} name="tile-2" value={1} title="tile-2">
+				<!-- <AppRailTile bind:group={currentTile} name="tile-2" value={1} title="tile-2">
 					<svelte:fragment slot="lead">(icon)</svelte:fragment>
 					<span>Tile 2</span>
 				</AppRailTile>
@@ -108,10 +113,10 @@
 					<svelte:fragment slot="lead">(icon)</svelte:fragment>
 					<span>Tile 3</span>
 				</AppRailTile>
-				<!-- --- -->
+
 				<svelte:fragment slot="trail">
 					<AppRailAnchor href="/" target="_blank" title="Account">(icon)</AppRailAnchor>
-				</svelte:fragment>
+				</svelte:fragment> -->
 			</AppRail></svelte:fragment
 		>
 
