@@ -4,16 +4,26 @@
 	import { focusTrap } from '@skeletonlabs/skeleton';
 	// Import each language module you require
 
-	import { DataHandler, Search, RowsPerPage, RowCount, Pagination } from '@vincjo/datatables';
+	import {
+		DataHandler,
+		Search,
+		RowsPerPage,
+		RowCount,
+		Pagination,
+		Th,
+		ThFilter
+	} from '@vincjo/datatables';
 	import { CodeBlock } from '@skeletonlabs/skeleton';
 	import { config } from '$lib/config';
 	const handler = new DataHandler(data.loans, { rowsPerPage: config.rowsPerPage });
 	const rows = handler.getRows();
+	const sort = handler.getSort();
 	let isFocused = true;
 	let searchString;
+	console.log(data.loans[3]);
 </script>
 
-<div class="table-container h-full">
+<div class="table-container w-full">
 	<div use:focusTrap={isFocused}>
 		<div class="p-3 m-3">
 			<input
@@ -29,13 +39,19 @@
 	<table class="table table-interactive">
 		<thead>
 			<tr>
-				<th class="w-1/16">ID</th>
-				<th class="w-1/16">Name</th>
-				<th class="w-1/16">Params</th>
-				<th class="w-1/16">Status</th>
-				<th>Product</th>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Params</th>
+				<th>Status</th>
+
+				<Th {handler} orderBy="product_id">Product</Th>
+
+				<Th {handler} orderBy="opening_timestamp">Opening Ts</Th>
 			</tr>
-			<tr> </tr>
+			<tr>
+				<th colspan="4" class="bg-tertiary-300 text-center">HAHA GA ADA FILTER</th>
+				<ThFilter {handler} filterBy="product_id" />
+			</tr>
 		</thead>
 		<tbody>
 			{#each $rows as row}
@@ -57,16 +73,16 @@
 						</Accordion></td
 					>
 
-					<td>{row.status}</td><td>{row.product_id}</td>
+					<td class = 'text-center'>{row.status ? '✅' : '❌'}</td>
+					<td>{row.product_id}</td>
+					<td>{new Date(row.opening_timestamp * 1000).toDateString()}</td>
 				</tr>
 			{/each}
 		</tbody>
 		<tfoot>
 			<tr>
 				<td><RowCount {handler} /> </td>
-				<td class="flex justify-center items-center">
-					<center><div><Pagination {handler} /></div></center></td
-				>
+				<td class="" colspan="4"> <Pagination {handler} class="justify-center" /></td>
 				<td><RowsPerPage {handler} /></td>
 
 				<!-- <td>haha</td> -->

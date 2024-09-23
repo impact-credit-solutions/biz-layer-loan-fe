@@ -50,7 +50,7 @@
 			var sto = get(myStore);
 			sto['token'] = respJson.access_token;
 			myStore.set(sto);
-			goto('/main');
+			goto('/loans/open');
 		} else {
 			errMsg = 'WRONG PASS';
 		}
