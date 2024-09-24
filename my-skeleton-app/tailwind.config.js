@@ -25,7 +25,7 @@ export default {
 						name: 'skeleton',
 						enhancements: true
 					},{
-						name: 'rocket',
+						name: 'wintry',
 						enhancements: true
 					}
 				]

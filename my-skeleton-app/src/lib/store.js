@@ -8,6 +8,10 @@ export const myStore = persisted('token', {
   detailsTab: 0
 
 })
+export const formStore = persisted('formStore', {
+
+
+})
 
 export function setVal(newVal, key) {
 

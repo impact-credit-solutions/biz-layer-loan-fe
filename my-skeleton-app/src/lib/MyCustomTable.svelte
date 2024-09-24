@@ -20,14 +20,38 @@
 	const sort = handler.getSort();
 	let isFocused = true;
 	let searchString;
+	let downloadURL;
+	function exportObjectsToJSON(objects, filename) {
+		// Convert objects to CSV format
+		const content = JSON.stringify(objects);
+
+		// Create a Blob object with CSV content
+		const blob = new Blob([content], { type: 'text/json' });
+
+		// Create a URL for the Blob object
+		const url = URL.createObjectURL(blob);
+
+		// Create
+
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = filename;
+
+		// Trigger the download
+		a.click();
+
+		// Clean up
+		window.URL.revokeObjectURL(url);
+	}
+
 	// console.log(data.loans[3]);
 </script>
 
 <div class="table-container w-full">
 	<div use:focusTrap={isFocused}>
-		<div class="p-3 ">
+		<div class="p-3">
 			<input
-				class="input w-full variant-soft-tertiary py-3 px-6"
+				class="input w-7/8 variant-soft-tertiary py-3 px-6"
 				type="search"
 				placeholder="Search..."
 				bind:value={searchString}
@@ -36,21 +60,20 @@
 		</div>
 	</div>
 	<!-- Native Table Element -->
-	<table class="table table-interactive">
+	<table class="table table-compact table-interactive border">
 		<thead>
-			<tr>
+			<tr class="border">
 				<th>ID</th>
 				<th>Name</th>
 				<th>Params</th>
 				<th>Status</th>
-
 				<Th {handler} orderBy="product_id">Product</Th>
-
 				<Th {handler} orderBy="opening_timestamp">Opening Ts</Th>
 			</tr>
 			<tr>
 				<th colspan="4" class="bg-tertiary-300 text-center">HAHA GA ADA FILTER</th>
 				<ThFilter {handler} filterBy="product_id" />
+				<th class="bg-tertiary-300 text-center"></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -73,7 +96,7 @@
 						</Accordion></td
 					>
 
-					<td class = 'text-center'>{row.status ? '✅' : '❌'}</td>
+					<td class="text-center justify-items-center">{row.status ? '✅' : '❌'}</td>
 					<td>{row.product_id}</td>
 					<td>{new Date(row.opening_timestamp * 1000).toDateString()}</td>
 				</tr>
@@ -82,9 +105,16 @@
 		<tfoot>
 			<tr>
 				<td><RowCount {handler} /> </td>
-				<td class="" colspan="4"> <Pagination {handler} class="justify-center" /></td>
+				<td class="" colspan="3"> <Pagination {handler} class="justify-center" /></td>
 				<td><RowsPerPage {handler} /></td>
-
+				<td
+					><button
+						class="btn variant-ghost-primary"
+						on:click={() => {
+							exportObjectsToJSON($rows, 'export_' + new Date().toLocaleDateString() + '.json');
+						}}>DOWNLOAD</button
+					></td
+				>
 				<!-- <td>haha</td> -->
 			</tr>
 		</tfoot>

@@ -23,6 +23,7 @@
 	let tabSet = get(myStore)['detailsTab'];
 
 	$: tabSet, setVal(tabSet, 'detailsTab');
+	console.log($rows);
 
 	// myStore.tabSet = tabSet;
 </script>
@@ -57,7 +58,7 @@
 						</div>
 					</header>
 					<!-- Native Table Element -->
-					<table class="table table-interactive">
+					<table class="table">
 						<thead>
 							<tr>
 								<th class="w-1/12">Address</th>
@@ -73,7 +74,7 @@
 						</thead>
 						<tbody>
 							{#each $rows as row}
-								<tr>
+								<tr class:table-row-checked={row.account_address === 'DEFAULT' && row.amount > 0}>
 									<td>{row.account_address}</td>
 									<td>{row.amount}</td>
 									<td>{row.phase}</td>

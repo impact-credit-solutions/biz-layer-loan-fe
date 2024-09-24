@@ -1,7 +1,8 @@
 <script>
 	import '../app.postcss';
 	import { AppShell, AppBar, TreeView, TreeViewItem } from '@skeletonlabs/skeleton';
-
+	import { copy } from 'svelte-copy';
+	import ContentCopy from 'svelte-material-icons/ContentCopy.svelte';
 	// Highlight JS
 	import hljs from 'highlight.js/lib/core';
 	import 'highlight.js/styles/github-dark.css';
@@ -42,25 +43,54 @@
 	import { ProgressBar } from '@skeletonlabs/skeleton';
 	beforeNavigate(() => (isLoading = true));
 	afterNavigate(() => (isLoading = false));
+	import { initializeStores, Toast } from '@skeletonlabs/skeleton';
+
+	initializeStores();
+	import { getToastStore } from '@skeletonlabs/skeleton';
+
+	const toastStore = getToastStore();
 </script>
 
 <!-- App Shell -->
 
-<div class="h-full">
+<div class="h-full w-full">
+	<Toast />
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
-	<AppShell>
+	<AppShell class="h-full">
 		<svelte:fragment slot="header">
 			<!-- App Bar -->
-			<div height="36">
-				<AppBar>
-					<svelte:fragment slot="lead">
-						<strong class="text-xl uppercase">Meongg</strong>
-					</svelte:fragment>
-					<svelte:fragment slot="trail">
-						<LightSwitch />
-					</svelte:fragment>
-				</AppBar>
-			</div>
+
+			<AppBar>
+				<svelte:fragment slot="lead">
+					<strong class="text-xl uppercase">
+						<ol class="breadcrumb">
+							{#each data.breadcrumbList as x, i}
+								<li class="crumb">
+									<a href={x.href} target="_self">{x.title}</a>
+									{#if i === data.breadcrumbList.length - 1 && data.pathname
+											.split('/')
+											.indexOf('details') > 0}
+										<!-- Only show when loan ID is visible (on details page) -->
+										<button
+											class=" variant-ghost sm"
+											use:copy={x.href.split('/')[2]}
+											on:click={() => {
+												toastStore.trigger({ message: 'COPIED', timeout: 1000 });
+											}}><ContentCopy /></button
+										>
+									{/if}
+								</li>
+								{#if i < data.breadcrumbList.length - 1}
+									<!-- only till n-1 we display the seperator -->
+									<li class="crumb-separator" aria-hidden="true">&rsaquo;</li>{/if}
+							{/each}
+						</ol>
+					</strong>
+				</svelte:fragment>
+				<svelte:fragment slot="trail">
+					<LightSwitch />
+				</svelte:fragment>
+			</AppBar>
 		</svelte:fragment>
 		<!-- Page Route Content -->
 		<svelte:fragment slot="sidebarLeft"
@@ -115,10 +145,62 @@
 			<!-- <slot /> -->
 			<!-- </div> -->
 		{:else}
-			{#key pathname}<div class="h-full" transition:fade>
+			{#key data.pathname}
+				<div class="px-3" transition:fade>
 					<slot />
 				</div>{/key}
 		{/if}
-		<svelte:fragment slot="pageFooter">Page Footer</svelte:fragment></AppShell
+		<svelte:fragment slot="pageFooter"
+			><footer class=" py-1 px-3 h-full">
+				<table class="w-full">
+					<thead>
+						<tr>
+							<td><h5 class="h5">Evotianus Benedicto</h5></td>
+							<td><h5>Contact</h5></td>
+							<td><h5>Navigation</h5></td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="p-1">
+								<p>Your tagline or short bio</p>
+							</td>
+							<td class="p-1">
+								<ul class="">
+									<li>
+										<a href="mailto:youremail@example.com" class="hover:underline"
+											>youremail@example.com</a
+										>
+									</li>
+									<li>
+										<a
+											href="https://www.linkedin.com/in/yourlinkedinprofile"
+											class="hover:underline">LinkedIn</a
+										>
+									</li>
+								</ul>
+							</td>
+							<td class="flex flex-col md:flex-row justify-evenly">
+								<div class="mr-4 md:mr-0">
+									<ul class="mt-2">
+										<li><a href="/" class="hover:underline">Home</a></li>
+										<li><a href="/about" class="hover:underline">About</a></li>
+									</ul>
+								</div>
+								<div>
+									<ul class="mt-2">
+										<li><a href="/projects" class="hover:underline">Projects</a></li>
+										<li><a href="/contact" class="hover:underline">Contact</a></li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="mt-4 text-center md:text-right">
+					<p>&copy; {new Date().getFullYear()} Your Name. All rights reserved.</p>
+				</div>
+			</footer></svelte:fragment
+		></AppShell
 	>
 </div>
