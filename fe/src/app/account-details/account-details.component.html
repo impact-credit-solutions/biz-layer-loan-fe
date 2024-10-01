@@ -1,0 +1,24 @@
+{{params|json}}
+<h2>{{params.accountId}}</h2>
+
+<div class='flex-container'>
+
+
+    <mat-card appearance="outlined">
+        <mat-card-header>
+            <mat-card-title>Balances</mat-card-title>
+        </mat-card-header>
+        <ag-grid-angular class="ag-theme-quartz" style="height: 100%;" [rowData]="balances"
+            [columnDefs]="colDefs_Balance" [pagination]="pagination" [paginationPageSize]="paginationPageSize"
+            [paginationPageSizeSelector]="paginationPageSizeSelector" [getRowStyle]="getRowStyle" />
+    </mat-card>
+
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Postings</mat-card-title>
+        </mat-card-header>
+        <ag-grid-angular class="ag-theme-quartz" style="height: 100%;" [rowData]="postings"
+            [columnDefs]="colDefs_Posting" [pagination]="pagination" [paginationPageSize]="paginationPageSize"
+            [paginationPageSizeSelector]="paginationPageSizeSelector" [getRowStyle]="getRowStyle" />
+    </mat-card>
+</div>
