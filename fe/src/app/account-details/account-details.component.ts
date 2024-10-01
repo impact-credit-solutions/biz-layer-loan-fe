@@ -5,8 +5,10 @@ import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { JsonPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { AgGridAngular, } from 'ag-grid-angular'; // Angular Data Grid Component
-import { ColDef, GridApi, GridOptions } from 'ag-grid-community'; // Column Definition Type Interface
+import { ColDef, GridApi, GridReadyEvent, ModuleRegistry, } from 'ag-grid-community'; // Column Definition Type Interface
 import { Title } from '@angular/platform-browser';
+import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
+
 @Component({
   selector: 'app-account-details',
   standalone: true,
@@ -24,21 +26,14 @@ export class AccountDetailsComponent implements OnInit {
   paginationPageSize = 30;
   paginationPageSizeSelector = [30, 50, 100];
   balances: any;
+
+  modules: any = [ClientSideRowModelModule];
+  private gridApiPosting!: GridApi;
   formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'IDR',
 
-    // These options can be used to round to whole numbers.
-    //trailingZeroDisplay: 'stripIfInteger' // This is probably what most people
-    // want. It will only stop printing
-    // the fraction when the input
-    // amount is a round number (int)
-    // already. If that's not what you
-    // need, have a look at the options
-    // below.
-    //minimumFractionDigits: 0, // This suffices for whole numbers, but will
-    // print 2500.10 as $2,500.1
-    //maximumFractionDigits: 0, // Causes 2500.99 to be printed as $2,501
+
   });
   getRowStyle(e: any) {
 
@@ -58,7 +53,7 @@ export class AccountDetailsComponent implements OnInit {
     { field: "phase" },
 
     { field: "amount", valueFormatter: p => this.formatter.format(p.value) },
-    { field: 'denomination', headerName: "denomination" },
+    { field: 'denomination', headerName: "denomination", width: 100 },
     { field: 'total_credit', headerName: "Credit", width: 280, valueFormatter: p => this.formatter.format(p.value) },
     { field: 'total_debit', headerName: "Debit", width: 280, valueFormatter: p => this.formatter.format(p.value) },
     { field: 'time_value', headerName: "Valued Timestamp", width: 280 }
@@ -72,9 +67,9 @@ export class AccountDetailsComponent implements OnInit {
     { field: 'account_address', width: 280 },
 
     { field: "amount", valueFormatter: p => this.formatter.format(p.value) },
-    { field: "credit" },
+    { field: "credit", cellStyle: { textAlign: 'center' }, width: 100 },
 
-    { field: 'denomination', headerName: "denomination" },
+    { field: 'denomination', headerName: "denomination", width: 100 },
     { field: 'insertion_timestamp', headerName: "Inserted Timestamp", width: 280, sort: "asc" },
     { field: 'value_timestamp', headerName: "Valued Timestamp", width: 280 }
 
@@ -84,14 +79,28 @@ export class AccountDetailsComponent implements OnInit {
 
   }
   async ngOnInit() {
+    var start = new Date()
+    start.setDate(start.getDate() - 7)
+    const end_d = new Date()
     this.params = await firstValueFrom(this.activatedRoute.params)
-    this.postings = await this.BQS.getPostings(this.params.accountId, 0, 1000)
+    this.postings = await this.BQS.getPostings(this.params.accountId, 0, 1000, start, end_d)
     this.balances = await this.BQS.getBalance(this.params.accountId, 0, 100)
     this.accountDetails = await this.BQS.getAccountDetail(this.params.accountId)
     this.titleService.setTitle(`${this.accountDetails.product_id} - ${this.params.accountId}`)
 
     // this.rowRules = this.postings.
   }
+  onFilterTextBoxPostingChanged() {
+    this.gridApiPosting.setGridOption(
+      "quickFilterText",
+      (document.getElementById("filter-text-box") as HTMLInputElement).value,
+    );
+  }
+  onGridReady(params: GridReadyEvent) {
+    this.gridApiPosting = params.api;
+
+  }
+
 }
 function stringToColour(str: string) {
 

@@ -8,14 +8,9 @@
             <mat-card-title>Balances</mat-card-title>
         </mat-card-header>
 
-
-        <mat-card>
-            <mat-card-header>Instance Params</mat-card-header>
-            <div class="code-container">
-
-                <pre><code>{{accountDetails|json}}</code></pre>
-            </div>
-        </mat-card>
+        <div class="code-container">
+            <pre><code>{{accountDetails|json}}</code></pre>
+        </div>
 
 
         <ag-grid-angular class="ag-theme-quartz" style="height: 100%;" [rowData]="balances"
@@ -23,12 +18,20 @@
             [paginationPageSizeSelector]="paginationPageSizeSelector" [getRowStyle]="getRowStyle" />
     </mat-card>
 
-    <mat-card>
+    <mat-card appearance="outlined">
         <mat-card-header>
             <mat-card-title>Postings</mat-card-title>
+            <mat-card-subtitle>
+                <div class="example-header">
+                    <span>Quick Filter:</span>
+                    <input type="text" id="filter-text-box" placeholder="Filter..."
+                        (input)="onFilterTextBoxPostingChanged()" />
+                </div>
+            </mat-card-subtitle>
         </mat-card-header>
         <ag-grid-angular class="ag-theme-quartz" style="height: 100%;" [rowData]="postings"
             [columnDefs]="colDefs_Posting" [pagination]="pagination" [paginationPageSize]="paginationPageSize"
-            [paginationPageSizeSelector]="paginationPageSizeSelector" [getRowStyle]="getRowStyle" />
+            [paginationPageSizeSelector]="paginationPageSizeSelector" [getRowStyle]="getRowStyle" [modules]="modules"
+            (gridReady)="onGridReady($event)" />
     </mat-card>
 </div>
