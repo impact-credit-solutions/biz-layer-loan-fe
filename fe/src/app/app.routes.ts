@@ -7,8 +7,8 @@ export const routes: Routes = [
 
     { path: 'accounts', redirectTo: 'accounts/all' },
 
-    { path: 'accounts/:status', component: GetAccountsComponent ,title:':status'},
+    { path: 'accounts/:status', component: GetAccountsComponent, title: "Accounts" },
 
-    { path: 'details/:accountId', component: AccountDetailsComponent ,title:':accountId'},
+    { path: 'details/:accountId', component: AccountDetailsComponent },
 ];
 

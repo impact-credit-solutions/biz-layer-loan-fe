@@ -1,4 +1,3 @@
-{{params|json}}
 <h2>{{params.accountId}}</h2>
 
 <div class='flex-container'>
@@ -8,6 +7,17 @@
         <mat-card-header>
             <mat-card-title>Balances</mat-card-title>
         </mat-card-header>
+
+
+        <mat-card>
+            <mat-card-header>Instance Params</mat-card-header>
+            <div class="code-container">
+
+                <pre><code>{{accountDetails|json}}</code></pre>
+            </div>
+        </mat-card>
+
+
         <ag-grid-angular class="ag-theme-quartz" style="height: 100%;" [rowData]="balances"
             [columnDefs]="colDefs_Balance" [pagination]="pagination" [paginationPageSize]="paginationPageSize"
             [paginationPageSizeSelector]="paginationPageSizeSelector" [getRowStyle]="getRowStyle" />

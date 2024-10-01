@@ -6,6 +6,7 @@ import { JsonPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { AgGridAngular, } from 'ag-grid-angular'; // Angular Data Grid Component
 import { ColDef, GridApi, GridOptions } from 'ag-grid-community'; // Column Definition Type Interface
+import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-account-details',
   standalone: true,
@@ -18,12 +19,29 @@ import { ColDef, GridApi, GridOptions } from 'ag-grid-community'; // Column Defi
 export class AccountDetailsComponent implements OnInit {
   params: any;
   postings: any;
+  accountDetails: any;
   pagination = true;
   paginationPageSize = 30;
   paginationPageSizeSelector = [30, 50, 100];
   balances: any;
+  formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'IDR',
+
+    // These options can be used to round to whole numbers.
+    //trailingZeroDisplay: 'stripIfInteger' // This is probably what most people
+    // want. It will only stop printing
+    // the fraction when the input
+    // amount is a round number (int)
+    // already. If that's not what you
+    // need, have a look at the options
+    // below.
+    //minimumFractionDigits: 0, // This suffices for whole numbers, but will
+    // print 2500.10 as $2,500.1
+    //maximumFractionDigits: 0, // Causes 2500.99 to be printed as $2,501
+  });
   getRowStyle(e: any) {
-    console.log(e.data)
+
     var temp;
     if (e.data.posting_instruction_id) {
       temp = e.data.posting_instruction_id
@@ -35,14 +53,15 @@ export class AccountDetailsComponent implements OnInit {
   }
   colDefs_Balance: ColDef[] = [
     {
-      field: "account_address", pinned: 'left', width: 350, headerName: "Address"
+      field: "account_address", pinned: 'left', width: 350, headerName: "Address", sort: 'asc'
     },
-    { field: 'account_address', width: 280 },
     { field: "phase" },
-    { field: "amount" },
+
+    { field: "amount", valueFormatter: p => this.formatter.format(p.value) },
     { field: 'denomination', headerName: "denomination" },
-    { field: 'total_credit', headerName: "Credit", width: 280 },
-    { field: 'total_debit', headerName: "Debit", width: 280 }
+    { field: 'total_credit', headerName: "Credit", width: 280, valueFormatter: p => this.formatter.format(p.value) },
+    { field: 'total_debit', headerName: "Debit", width: 280, valueFormatter: p => this.formatter.format(p.value) },
+    { field: 'time_value', headerName: "Valued Timestamp", width: 280 }
 
 
   ];
@@ -51,27 +70,31 @@ export class AccountDetailsComponent implements OnInit {
       field: "posting_instruction_id", pinned: 'left', width: 350, headerName: "Posting ID"
     },
     { field: 'account_address', width: 280 },
+
+    { field: "amount", valueFormatter: p => this.formatter.format(p.value) },
     { field: "credit" },
-    { field: "amount" },
+
     { field: 'denomination', headerName: "denomination" },
-    { field: 'insertion_timestamp', headerName: "Inserted Timestamp", width: 280 },
+    { field: 'insertion_timestamp', headerName: "Inserted Timestamp", width: 280, sort: "asc" },
     { field: 'value_timestamp', headerName: "Valued Timestamp", width: 280 }
 
 
   ];
-  constructor(private BQS: BalanceQueryService, private activatedRoute: ActivatedRoute) {
+  constructor(private BQS: BalanceQueryService, private activatedRoute: ActivatedRoute, private titleService: Title) {
 
   }
   async ngOnInit() {
     this.params = await firstValueFrom(this.activatedRoute.params)
-    this.postings = await this.BQS.getPostings(this.params.accountId)
+    this.postings = await this.BQS.getPostings(this.params.accountId, 0, 1000)
     this.balances = await this.BQS.getBalance(this.params.accountId, 0, 100)
-    console.log(this.balances)
+    this.accountDetails = await this.BQS.getAccountDetail(this.params.accountId)
+    this.titleService.setTitle(`${this.accountDetails.product_id} - ${this.params.accountId}`)
+
     // this.rowRules = this.postings.
   }
 }
 function stringToColour(str: string) {
-  console.log(str)
+
   let hash = 0;
   str.split('').forEach(char => {
     hash = char.charCodeAt(0) + ((hash << 5) - hash)

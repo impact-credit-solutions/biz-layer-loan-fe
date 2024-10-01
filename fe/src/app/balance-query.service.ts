@@ -18,8 +18,11 @@ export class BalanceQueryService {
     ))
   }
 
-  async getPostings(accountId: string) {
-    return await lastValueFrom(this.http.get(`${this.baseUrl}/accounts/${accountId}/postings`))
+  async getPostings(accountId: string, page: number, size: number) {
+    return await lastValueFrom(this.http.get(`${this.baseUrl}/accounts/${accountId}/postings`, { params: { page, size } }))
+  }
+  async getAccountDetail(accountId: string) {
+    return await lastValueFrom(this.http.get(`${this.baseUrl}/accounts/${accountId}`))
   }
   async getAllAccount(status: string, page: number, size: number) {
     console.log(`GETTING ACCOUNTS ${status} ${page} ${size}`)

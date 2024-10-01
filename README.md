@@ -1,8 +1,8 @@
-# How to get started
-1. npm i 
-2. go to `/src/lib/config.js` and change the default value there
-    * Do not forget to turn on your port-forward if needed
-    * you might need to run the command `lcp --proxyUrl http://localhost:8099`
-3. npm run dev
-4. Open http://localhost:5173/
-    
+# Getting Started
+1. `cd fe`
+2. `npm i`
+3. Install proxy `npm install -g local-cors-proxy`
+4. Run your Port forward to PProd Bastion
+5. In a 2 new terminal run (cd to folder `fe` first)
+    * `npm run proxy` 
+    * `npm start`

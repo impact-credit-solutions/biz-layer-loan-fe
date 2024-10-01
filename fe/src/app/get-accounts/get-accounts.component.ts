@@ -25,11 +25,23 @@ export class GetAccountsComponent implements OnInit {
       field: "id", pinned: 'left', width: 350, headerName: "Account ID", onCellClicked: ((e) => { this.router.navigate([`/details/${e.data.id}`]) })
     },
     { field: "status" },
-    { field: "product_id" },
+    { field: "product_id", sort: 'desc' },
     { field: 'opening_timestamp', headerName: "Opened at" },
 
 
   ];
+
+  getRowStyle(e: any) {
+    console.log(e.data)
+    var temp;
+    if (e.data.product_id) {
+      temp = e.data.product_id
+    }
+    else {
+      temp = e.data.status
+    }
+    return { 'background-color': stringToColour(temp) }
+  }
   pagination = true;
   paginationPageSize = 30;
   paginationPageSizeSelector = [30, 50, 100];
@@ -63,4 +75,17 @@ export class GetAccountsComponent implements OnInit {
 
   }
 
+}
+function stringToColour(str: string) {
+  console.log(str)
+  let hash = 0;
+  str.split('').forEach(char => {
+    hash = char.charCodeAt(0) + ((hash << 5) - hash)
+  })
+  let colour = '#'
+  for (let i = 0; i < 3; i++) {
+    const value = (hash >> (i * 8)) & 0xff
+    colour += value.toString(16).padStart(2, '0')
+  }
+  return colour + "55"
 }
