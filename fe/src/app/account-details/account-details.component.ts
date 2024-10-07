@@ -8,16 +8,16 @@ import { AgGridAngular, } from 'ag-grid-angular'; // Angular Data Grid Component
 import { ColDef, GridApi, GridReadyEvent, ModuleRegistry, } from 'ag-grid-community'; // Column Definition Type Interface
 import { Title } from '@angular/platform-browser';
 import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
-
+import { Clipboard } from '@angular/cdk/clipboard';
+import { Highlight } from 'ngx-highlightjs';
+import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
 @Component({
   selector: 'app-account-details',
   standalone: true,
-  imports: [JsonPipe, AgGridAngular, MatCardModule],
+  imports: [JsonPipe, AgGridAngular, MatCardModule, Highlight, HighlightLineNumbers],
   templateUrl: './account-details.component.html',
   styleUrl: './account-details.component.css'
 })
-
-
 export class AccountDetailsComponent implements OnInit {
   params: any;
   postings: any;
@@ -26,15 +26,24 @@ export class AccountDetailsComponent implements OnInit {
   paginationPageSize = 30;
   paginationPageSizeSelector = [30, 50, 100];
   balances: any;
-
+  selectedPosting: any;
   modules: any = [ClientSideRowModelModule];
   private gridApiPosting!: GridApi;
+  private gridApiBalance!: GridApi;
+  private gridApiPostingDetails!: GridApi;
   formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'IDR',
 
 
   });
+
+  getPostingRowStyle(e: any) {
+    // console.log(e)
+    var temp;
+    temp = e.data.account_id
+    return { 'background-color': stringToColour(temp) }
+  }
   getRowStyle(e: any) {
 
     var temp;
@@ -48,34 +57,79 @@ export class AccountDetailsComponent implements OnInit {
   }
   colDefs_Balance: ColDef[] = [
     {
-      field: "account_address", pinned: 'left', width: 350, headerName: "Address", sort: 'asc'
+      field: "account_address", pinned: 'left', width: 250, headerName: "Address", sort: 'asc'
     },
     { field: "phase" },
 
     { field: "amount", valueFormatter: p => this.formatter.format(p.value) },
     { field: 'denomination', headerName: "denomination", width: 100 },
-    { field: 'total_credit', headerName: "Credit", width: 280, valueFormatter: p => this.formatter.format(p.value) },
-    { field: 'total_debit', headerName: "Debit", width: 280, valueFormatter: p => this.formatter.format(p.value) },
+    { field: 'total_credit', headerName: "Credit", width: 180, valueFormatter: p => this.formatter.format(p.value) },
+    { field: 'total_debit', headerName: "Debit", width: 180, valueFormatter: p => this.formatter.format(p.value) },
     { field: 'time_value', headerName: "Valued Timestamp", width: 280 }
 
 
   ];
-  colDefs_Posting: ColDef[] = [
+
+  colDefs_PostingsDetails: ColDef[] = [
     {
-      field: "posting_instruction_id", pinned: 'left', width: 350, headerName: "Posting ID"
+      field: "account_address", pinned: 'left', width: 250, headerName: "Address", sort: 'asc'
     },
-    { field: 'account_address', width: 280 },
+    { field: 'account_id' },
+    { field: "phase", width: 150 },
 
     { field: "amount", valueFormatter: p => this.formatter.format(p.value) },
-    { field: "credit", cellStyle: { textAlign: 'center' }, width: 100 },
-
-    { field: 'denomination', headerName: "denomination", width: 100 },
-    { field: 'insertion_timestamp', headerName: "Inserted Timestamp", width: 280, sort: "asc" },
-    { field: 'value_timestamp', headerName: "Valued Timestamp", width: 280 }
+    // { field: 'denomination', headerName: "denomination", width: 100 },
+    { field: 'credit', headerName: "Credit", width: 80 },
+    { field: 'value_timestamp', headerName: "Valued Timestamp", width: 280 },
+    { field: 'insertion_timestamp', headerName: "Insertion Timestamp", width: 280 }
 
 
   ];
-  constructor(private BQS: BalanceQueryService, private activatedRoute: ActivatedRoute, private titleService: Title) {
+
+
+
+
+  colDefs_Posting: ColDef[] = [
+    {
+      field: "batch_id", pinned: 'left', width: 200, headerName: "Posting Batch ID", onCellClicked: (e) => {
+        // console.log(e.data)
+        this.clipboard.copy(e.data.batch_id)
+      }
+    },
+    {
+      field: "posting_instructions", headerName: "Instructions", width: 400, valueGetter: (row: any) => {
+
+        return JSON.stringify(row.data.postings_instructions[0].postings, null, 2)
+      },
+
+      onCellClicked: (event) => {
+
+        console.log(event.data.postings_instructions[0].postings)
+        this.selectedPosting = event.data.postings_instructions[0].postings
+
+
+      },
+    },
+    {
+      field: "request_id", pinned: 'left', width: 350, headerName: "Request Batch ID", onCellClicked: (e) => {
+        // console.log(e.data)
+        this.clipboard.copy(e.data.batch_id)
+      }
+    },
+
+    { field: "timestamp", width: 200, valueGetter: (e) => { return e.data.request_id.split('_')[e.data.request_id.split('_').length - 1] } }
+    // { field: 'account_address', width: 280 },
+
+    // { field: "amount", valueFormatter: p => this.formatter.format(p.value) },
+    // { field: "credit", cellStyle: { textAlign: 'center' }, width: 100 },
+
+    // { field: 'denomination', headerName: "denomination", width: 100 },
+    // { field: 'insertion_timestamp', headerName: "Inserted Timestamp", width: 280, sort: "asc" },
+    // { field: 'value_timestamp', headerName: "Valued Timestamp", width: 280 }
+
+
+  ];
+  constructor(private BQS: BalanceQueryService, private activatedRoute: ActivatedRoute, private titleService: Title, private clipboard: Clipboard) {
 
   }
   async ngOnInit() {
@@ -83,21 +137,42 @@ export class AccountDetailsComponent implements OnInit {
     start.setDate(start.getDate() - 7)
     const end_d = new Date()
     this.params = await firstValueFrom(this.activatedRoute.params)
-    this.postings = await this.BQS.getPostings(this.params.accountId, 0, 1000, start, end_d)
+
+    this.postings = await this.BQS.getPostingsBatch(this.params.accountId, 0, 100, start, end_d)
     this.balances = await this.BQS.getBalance(this.params.accountId, 0, 100)
     this.accountDetails = await this.BQS.getAccountDetail(this.params.accountId)
-    this.titleService.setTitle(`${this.accountDetails.product_id} - ${this.params.accountId}`)
 
+    this.titleService.setTitle(`${this.accountDetails.product_id} - ${this.params.accountId}`)
+    this.accountDetails = JSON.stringify(this.accountDetails, null, 4)
+    // console.log(this.postings)
     // this.rowRules = this.postings.
   }
   onFilterTextBoxPostingChanged() {
     this.gridApiPosting.setGridOption(
       "quickFilterText",
-      (document.getElementById("filter-text-box") as HTMLInputElement).value,
+      (document.getElementById("filter-text-box-posting") as HTMLInputElement).value,
     );
   }
-  onGridReady(params: GridReadyEvent) {
+
+
+  onFilterTextBoxBalanceChanged() {
+    this.gridApiBalance.setGridOption(
+      "quickFilterText",
+      (document.getElementById("filter-text-box-balance") as HTMLInputElement).value,
+    );
+  }
+  onPostingDetailsGridReady(params: GridReadyEvent) {
+    this.gridApiPostingDetails = params.api;
+
+
+  }
+  onPostingGridReady(params: GridReadyEvent) {
     this.gridApiPosting = params.api;
+
+
+  }
+  onBalanceGridReady(params: GridReadyEvent) {
+    this.gridApiBalance = params.api;
 
   }
 

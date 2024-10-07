@@ -1,1 +1,25 @@
-<router-outlet />
+<!-- <div class="app-bar">
+
+    <p> Kapan saya bisa bobo siang</p>
+</div> -->
+<div class="container">
+    <nav class='navigation-menu'>
+        <ul>
+            <li><a>Accounts</a>
+                <ul class="dropdown-menu">
+                    <li><a href="/accounts/open">Open Accounts</a></li>
+                    <li><a href="/accounts/closed">Closed Accounts</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Settings</a></li>
+        </ul>
+
+    </nav>
+    <div class="content">
+
+        <router-outlet />
+    </div>
+</div>
+<footer>
+    <p>Copyright &copy; 2024 Your Website</p>
+</footer>

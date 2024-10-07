@@ -1,37 +1,63 @@
-<h2>{{params.accountId}}</h2>
+<div class="container">
+    <div class="card">
 
-<div class='flex-container'>
-
-
-    <mat-card appearance="outlined">
         <mat-card-header>
-            <mat-card-title>Balances</mat-card-title>
-        </mat-card-header>
-
-        <div class="code-container">
-            <pre><code>{{accountDetails|json}}</code></pre>
-        </div>
-
-
-        <ag-grid-angular class="ag-theme-quartz" style="height: 100%;" [rowData]="balances"
-            [columnDefs]="colDefs_Balance" [pagination]="pagination" [paginationPageSize]="paginationPageSize"
-            [paginationPageSizeSelector]="paginationPageSizeSelector" [getRowStyle]="getRowStyle" />
-    </mat-card>
-
-    <mat-card appearance="outlined">
-        <mat-card-header>
-            <mat-card-title>Postings</mat-card-title>
+            <mat-card-title>
+                <h4>Postings</h4>
+            </mat-card-title>
             <mat-card-subtitle>
                 <div class="example-header">
                     <span>Quick Filter:</span>
-                    <input type="text" id="filter-text-box" placeholder="Filter..."
+                    <input type="text" id="filter-text-box-posting" placeholder="Filter..."
                         (input)="onFilterTextBoxPostingChanged()" />
                 </div>
             </mat-card-subtitle>
         </mat-card-header>
-        <ag-grid-angular class="ag-theme-quartz" style="height: 100%;" [rowData]="postings"
-            [columnDefs]="colDefs_Posting" [pagination]="pagination" [paginationPageSize]="paginationPageSize"
-            [paginationPageSizeSelector]="paginationPageSizeSelector" [getRowStyle]="getRowStyle" [modules]="modules"
-            (gridReady)="onGridReady($event)" />
-    </mat-card>
+
+
+        <ag-grid-angular class="ag-theme-quartz" [rowData]="postings" [columnDefs]="colDefs_Posting"
+            [pagination]="pagination" [paginationPageSize]="paginationPageSize"
+            [paginationPageSizeSelector]="paginationPageSizeSelector" [modules]="modules"
+            (gridReady)="onPostingGridReady($event)" />
+
+
+
+        <ag-grid-angular class="ag-theme-quartz" [rowData]="selectedPosting" [columnDefs]="colDefs_PostingsDetails"
+            [pagination]="pagination" [paginationPageSize]="paginationPageSize"
+            [paginationPageSizeSelector]="paginationPageSizeSelector" [modules]="modules"
+            (gridReady)="onPostingDetailsGridReady($event)" [getRowStyle]="getPostingRowStyle" />
+
+
+
+
+    </div>
+
+    <br>
+    <div class="card">
+
+
+        <mat-card-header>
+            <mat-card-title>
+                <h4>Account Details</h4>
+            </mat-card-title>
+            <mat-card-subtitle>
+                <div class="example-header">
+                    <span>Quick Filter:</span>
+                    <input type="text" id="filter-text-box-balance" placeholder="Filter..."
+                        (input)="onFilterTextBoxBalanceChanged()" />
+                </div>
+            </mat-card-subtitle>
+        </mat-card-header>
+        <ag-grid-angular class="ag-theme-quartz" [rowData]="balances" [columnDefs]="colDefs_Balance"
+            [pagination]="pagination" [paginationPageSize]="paginationPageSize"
+            [paginationPageSizeSelector]="paginationPageSizeSelector" [getRowStyle]="getRowStyle"
+            (gridReady)="onBalanceGridReady($event)" />
+        <div class="code-container">
+            <h5> Params</h5>
+            <pre><code [highlight] = "accountDetails" language="json" lineNumbers  ></code></pre>
+        </div>
+
+
+
+    </div>
 </div>

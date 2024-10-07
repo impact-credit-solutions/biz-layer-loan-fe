@@ -1,38 +1,97 @@
-:host {
-    height: 100%;
+.container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 3px;
+    height: 100vh;
 }
 
-mat-card {
-    width: 100%;
-    height: 100%;
-    padding: 3px;
-    margin: 1px;
-}
 
 mat-card-header {
     background-color: white;
 }
 
-.flex-container {
-    display: flex;
-    flex-direction: row;
-    flex: 1
+ag-grid-angular {
+    height: 100%;
+    width: 100%;
+
+
 }
 
-code {
-    background-color: white;
-}
 
 .code-container {
     background-color: white;
-    height: 200px;
+    height: 100%;
     overflow-y: scroll;
+    overflow-wrap: normal;
+
 }
 
-.example-header {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 13px;
-    margin-bottom: 5px;
+br {
+    background-color: blue;
+    height: 20px;
+}
+
+.card {
+    /* ... other card styles ... */
+    border: 3px solid transparent;
+    width: 48%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    
+
+
+
+}
+
+.card:hover {
+    animation: rainbow-border 6s infinite linear;
+}
+
+@keyframes rainbow-border {
+    0% {
+        border-color: red;
+    }
+
+    10% {
+        border-color: orange;
+    }
+
+    20% {
+        border-color: yellow;
+    }
+
+    30% {
+        border-color: green;
+    }
+
+    40% {
+        border-color: blue;
+    }
+
+    50% {
+        border-color: indigo;
+    }
+
+    60% {
+        border-color: violet;
+    }
+
+    70% {
+        border-color: pink;
+    }
+
+    80% {
+        border-color: purple;
+    }
+
+    90% {
+        border-color: magenta;
+    }
+
+    100% {
+        border-color: red;
+    }
 }

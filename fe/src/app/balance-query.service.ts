@@ -17,9 +17,11 @@ export class BalanceQueryService {
       this.baseUrl + "/v2/accounts/" + accountId + '/balance/live', { params: { page, size } }
     ))
   }
-
-  async getPostings(accountId: string, page: number, size: number, start: Date, end: Date) {
-    return await lastValueFrom(this.http.get(`${this.baseUrl}/accounts/${accountId}/postings`, { params: { page, size, start: start.toISOString(), end: end.toISOString() } }))
+  async getPostingsByBatch(batchId: string) {
+    return await lastValueFrom(this.http.get(`${this.baseUrl}/postings`, { params: { batchId } }))
+  }
+  async getPostingsBatch(accountId: string, page: number, size: number, start: Date, end: Date) {
+    return await lastValueFrom(this.http.get(`${this.baseUrl}/postings/${accountId}/postings-batch`, { params: { page, size, start: start.toISOString(), end: end.toISOString() } }))
   }
   async getAccountDetail(accountId: string) {
     return await lastValueFrom(this.http.get(`${this.baseUrl}/accounts/${accountId}`))

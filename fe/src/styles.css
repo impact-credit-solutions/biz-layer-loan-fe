@@ -2,6 +2,7 @@
 @import "ag-grid-community/styles/ag-grid.css";
 /* Quartz Theme Specific CSS */
 @import "ag-grid-community/styles/ag-theme-quartz.css";
+@import 'highlight.js/styles/github.css';
 
 html,
 body {

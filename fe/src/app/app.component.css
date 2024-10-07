@@ -1,3 +1,107 @@
-my-shaded-effect {
-    background-color: grey;
+.app-bar {
+    display: flex;
+    flex-direction: column;
+    height: 2rem;
+}
+
+.navigation-menu {
+    flex: 0 0 auto;
+    background-color: #f0f0f0;
+    padding: 10px;
+    width: 8rem;
+    /* Adjust the width as needed */
+    background-color: #f0f0f0;
+    padding: 20px;
+}
+
+.content {
+    flex: 1 0 auto;
+    padding: 2px;
+    flex-grow: initial;
+    min-height: 100vh;
+    max-width: 90%;
+}
+
+footer {
+
+
+}
+
+/* ... other styles ... */
+
+.navigation-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navigation-menu li {
+    display: block;
+
+}
+
+.navigation-menu a {
+    text-decoration: none;
+    color: black;
+    padding: 5px 10px;
+}
+
+.navigation-menu a:hover {
+    background-color: #f0f0f0;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav li {
+    position: relative;
+}
+
+nav li a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+}
+
+nav li a:hover {
+    background-color: #f0f0f0;
+}
+
+nav li ul {
+    z-index: 1;
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+nav li:hover ul {
+    display: block;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-menu.open {
+    display: block;
+}
+
+.dropdown-menu li:hover .dropdown-menu {
+    display: block;
+}
+
+.container {
+    display: flex;
 }

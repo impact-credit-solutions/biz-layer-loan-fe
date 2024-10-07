@@ -25,8 +25,8 @@ export class GetAccountsComponent implements OnInit {
       field: "id", pinned: 'left', width: 350, headerName: "Account ID", onCellClicked: ((e) => { this.router.navigate([`/details/${e.data.id}`]) })
     },
     { field: "status" },
-    { field: "product_id", sort: 'desc' },
-    { field: 'opening_timestamp', headerName: "Opened at" },
+    { field: "product_id" },
+    { field: 'opening_timestamp', headerName: "Opened at", sort: 'desc' },
 
 
   ];
@@ -60,18 +60,18 @@ export class GetAccountsComponent implements OnInit {
     })
 
 
-    this.data = await this.BQS.getAllAccount(this.params.status, 0, 1000)
+    this.data = await this.BQS.getAllAccount(this.params.status,6, 100)
+
     // this.data = await this.data.array.forEach((element: any) => {
     //   element['opening_timestamp'] = (new Date(element['opening_timestamp'])).getUTCDate()
     //   return element
     // });
-
     this.data.forEach((e: any) => {
 
       e['opening_timestamp'] = (new Date(e['opening_timestamp'] * 1000)).toDateString()
       return e
     })
-    console.log(this.data)
+
 
   }
 
