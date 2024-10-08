@@ -48,7 +48,7 @@
                 </div>
             </mat-card-subtitle>
         </mat-card-header>
-        <ag-grid-angular class="ag-theme-quartz" [rowData]="balances" [columnDefs]="colDefs_Balance"
+        <ag-grid-angular class="ag-theme-quartz"  [rowData]="balances" [columnDefs]="colDefs_Balance"
             [pagination]="pagination" [paginationPageSize]="paginationPageSize"
             [paginationPageSizeSelector]="paginationPageSizeSelector" [getRowStyle]="getRowStyle"
             (gridReady)="onBalanceGridReady($event)" />
@@ -60,4 +60,5 @@
 
 
     </div>
+
 </div>

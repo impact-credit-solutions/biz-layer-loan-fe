@@ -31,14 +31,14 @@ export class BalanceQueryService {
 
     if (status === 'all') {
       return await lastValueFrom(this.http.get(
-        this.baseUrl + '/accounts', { params: { page, size } }
+        this.baseUrl + '/accounts', { params: { page, size, sort: 'opening_timestamp,desc' } }
       ))
     }
 
     else {
 
       return await lastValueFrom(this.http.get(
-        this.baseUrl + '/accounts', { params: { status: status.toUpperCase(), page, size } }
+        this.baseUrl + '/accounts', { params: { status: status.toUpperCase(), page, size, sort: 'opening_timestamp,desc' } }
       ))
 
     }

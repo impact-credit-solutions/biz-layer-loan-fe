@@ -1,0 +1,16 @@
+<div class="card-container">
+    @for (item of items; track $index) {
+    @if(item){
+    <div class="flip-card " (click)="revealCard(item)">
+        <div class="flip-card-inner">
+            <div class="flip-card-front">
+                <img src="img_avatar.png" alt="Avatar" style="width:300px;height:300px;">
+            </div>
+            <div class="flip-card-back">
+                <h1>{{item}}</h1>
+
+            </div>
+        </div>
+    </div>}
+    }
+</div>

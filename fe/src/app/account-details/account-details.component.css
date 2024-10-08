@@ -4,7 +4,7 @@
     flex-wrap: wrap;
     width: 100%;
     gap: 3px;
-    height: 100vh;
+    height: 90%;
 }
 
 
@@ -14,7 +14,7 @@ mat-card-header {
 
 ag-grid-angular {
     height: 100%;
-    width: 100%;
+    min-width: 900px;
 
 
 }
@@ -38,11 +38,10 @@ br {
     border: 3px solid transparent;
     width: 48%;
     height: 100vh;
+
+    flex: 1;
     display: flex;
     flex-direction: column;
-    
-
-
 
 }
 

@@ -91,12 +91,6 @@ export class AccountDetailsComponent implements OnInit {
 
   colDefs_Posting: ColDef[] = [
     {
-      field: "batch_id", pinned: 'left', width: 200, headerName: "Posting Batch ID", onCellClicked: (e) => {
-        // console.log(e.data)
-        this.clipboard.copy(e.data.batch_id)
-      }
-    },
-    {
       field: "posting_instructions", headerName: "Instructions", width: 400, valueGetter: (row: any) => {
 
         return JSON.stringify(row.data.postings_instructions[0].postings, null, 2)
@@ -111,13 +105,20 @@ export class AccountDetailsComponent implements OnInit {
       },
     },
     {
+      field: "batch_id", width: 200, headerName: "Posting Batch ID", onCellClicked: (e) => {
+        // console.log(e.data)
+        this.clipboard.copy(e.data.batch_id)
+      }
+    },
+    { field: "timestamp", width: 200, valueGetter: (e) => { return e.data.request_id.split('_')[e.data.request_id.split('_').length - 1] } },
+    {
       field: "request_id", pinned: 'left', width: 350, headerName: "Request Batch ID", onCellClicked: (e) => {
         // console.log(e.data)
         this.clipboard.copy(e.data.batch_id)
       }
     },
 
-    { field: "timestamp", width: 200, valueGetter: (e) => { return e.data.request_id.split('_')[e.data.request_id.split('_').length - 1] } }
+
     // { field: 'account_address', width: 280 },
 
     // { field: "amount", valueFormatter: p => this.formatter.format(p.value) },

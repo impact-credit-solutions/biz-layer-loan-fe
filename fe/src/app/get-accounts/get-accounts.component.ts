@@ -60,7 +60,7 @@ export class GetAccountsComponent implements OnInit {
     })
 
 
-    this.data = await this.BQS.getAllAccount(this.params.status,6, 100)
+    this.data = await this.BQS.getAllAccount(this.params.status, 0, 100)
 
     // this.data = await this.data.array.forEach((element: any) => {
     //   element['opening_timestamp'] = (new Date(element['opening_timestamp'])).getUTCDate()
