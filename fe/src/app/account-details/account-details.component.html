@@ -1,4 +1,21 @@
+<div class="picker-container">
+    Tanggal Effective Posting Dan Balance
+    <form [formGroup]="range" (ngSubmit)="dateChanged()">
+        <mat-form-field>
+            <mat-label>Choose a date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="start">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <button type="submit">Ganti Tanggal</button>
+    </form>
+    {{range.value|json}}
+</div>
+
 <div class="container">
+
     <div class="card">
 
         <mat-card-header>
@@ -11,7 +28,11 @@
                     <input type="text" id="filter-text-box-posting" placeholder="Filter..."
                         (input)="onFilterTextBoxPostingChanged()" />
                 </div>
+
             </mat-card-subtitle>
+
+
+
         </mat-card-header>
 
 
@@ -48,7 +69,7 @@
                 </div>
             </mat-card-subtitle>
         </mat-card-header>
-        <ag-grid-angular class="ag-theme-quartz"  [rowData]="balances" [columnDefs]="colDefs_Balance"
+        <ag-grid-angular class="ag-theme-quartz" [rowData]="balances" [columnDefs]="colDefs_Balance"
             [pagination]="pagination" [paginationPageSize]="paginationPageSize"
             [paginationPageSizeSelector]="paginationPageSizeSelector" [getRowStyle]="getRowStyle"
             (gridReady)="onBalanceGridReady($event)" />

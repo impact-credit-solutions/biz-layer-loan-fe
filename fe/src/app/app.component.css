@@ -15,17 +15,17 @@
 }
 
 .content {
-    flex: 1 0 auto;
+
     padding: 2px;
     flex-grow: initial;
     min-height: 100vh;
-    max-width: 90%;
+    width: 100%;
+    justify-content: center;
+    justify-items: center;
+ 
 }
 
-footer {
-
-
-}
+footer {}
 
 /* ... other styles ... */
 

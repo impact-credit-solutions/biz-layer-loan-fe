@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { BalanceQueryService } from '../balance-query.service';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom, lastValueFrom } from 'rxjs';
@@ -11,14 +11,40 @@ import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-mod
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Highlight } from 'ngx-highlightjs';
 import { HighlightLineNumbers } from 'ngx-highlightjs/line-numbers';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'app-account-details',
   standalone: true,
-  imports: [JsonPipe, AgGridAngular, MatCardModule, Highlight, HighlightLineNumbers],
+  providers: [provideNativeDateAdapter()],
+  imports: [JsonPipe, AgGridAngular, MatCardModule, Highlight, HighlightLineNumbers, MatDatepickerModule, MatInputModule, MatFormFieldModule, FormsModule, ReactiveFormsModule],
   templateUrl: './account-details.component.html',
-  styleUrl: './account-details.component.css'
+  styleUrl: './account-details.component.css',
+  // changeDetection: ChangeDetectionStrategy.,
 })
 export class AccountDetailsComponent implements OnInit {
+  readonly range = new FormGroup({
+    start: new FormControl<Date>(new Date()),
+  });
+  async dateChanged() {
+    console.log(this.range.value)
+
+    var start = this.range.value.start
+    // start!.setDate(start!.getDate() - 7)
+    const end_d = new Date()
+    console.log("FETCHING NEW VALS")
+
+    // this.postings = await this.BQS.getPostingsBatch(this.params.accountId, 0, 100, start!, end_d)
+    this.balances = await this.BQS.getBalance(this.params.accountId, 0, 100, start!)
+
+    console.log(this.balances)
+    console.log(this.postings)
+    // this.accountDetails = await this.BQS.getAccountDetail(this.params.accountId)
+
+  }
   params: any;
   postings: any;
   accountDetails: any;
@@ -28,6 +54,7 @@ export class AccountDetailsComponent implements OnInit {
   balances: any;
   selectedPosting: any;
   modules: any = [ClientSideRowModelModule];
+  picker: any;
   private gridApiPosting!: GridApi;
   private gridApiBalance!: GridApi;
   private gridApiPostingDetails!: GridApi;
@@ -98,7 +125,7 @@ export class AccountDetailsComponent implements OnInit {
 
       onCellClicked: (event) => {
 
-        console.log(event.data.postings_instructions[0].postings)
+        // console.log(event.data.postings_instructions[0].postings)
         this.selectedPosting = event.data.postings_instructions[0].postings
 
 
@@ -134,14 +161,16 @@ export class AccountDetailsComponent implements OnInit {
 
   }
   async ngOnInit() {
-    var start = new Date()
-    start.setDate(start.getDate() - 7)
+    var start = this.range.value.start
+    start!.setDate(start!.getDate() - 7)
     const end_d = new Date()
     this.params = await firstValueFrom(this.activatedRoute.params)
 
-    this.postings = await this.BQS.getPostingsBatch(this.params.accountId, 0, 100, start, end_d)
-    this.balances = await this.BQS.getBalance(this.params.accountId, 0, 100)
+    this.postings = await this.BQS.getPostingsBatch(this.params.accountId, 0, 100, start!, end_d)
+    this.balances = await this.BQS.getBalance(this.params.accountId, 0, 100, end_d)
     this.accountDetails = await this.BQS.getAccountDetail(this.params.accountId)
+
+
 
     this.titleService.setTitle(`${this.accountDetails.product_id} - ${this.params.accountId}`)
     this.accountDetails = JSON.stringify(this.accountDetails, null, 4)
