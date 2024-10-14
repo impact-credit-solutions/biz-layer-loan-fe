@@ -12,9 +12,9 @@ export class BalanceQueryService {
   constructor(private http: HttpClient) { }
 
 
-  async getBalance(accountId: string, page: number, size: number, fromTime: Date) {
-    return await firstValueFrom(this.http.get(
-      this.baseUrl + "/v2/accounts/" + accountId + '/balance/live', { params: { page, size, effectiveTime: fromTime.toISOString() } }
+  async getBalance(accountId: string, page: number, size: number, fromTime: Date, toTime: Date) {
+    return await lastValueFrom(this.http.get(
+      this.baseUrl + "/v2/accounts/" + accountId + '/balance/live', { params: { page, size, fromTime: fromTime.toISOString(), toTime: toTime.toISOString() } }
     ))
   }
   async getPostingsByBatch(batchId: string) {

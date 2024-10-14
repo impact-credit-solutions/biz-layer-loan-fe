@@ -32,35 +32,21 @@ export class AccountDetailsComponent implements OnInit {
   async dateChanged() {
     console.log(this.range.value)
 
-    var start = this.range.value.start
     // start!.setDate(start!.getDate() - 7)
-    const end_d = new Date()
-    end_d.setDate(start!.getDate() + 1)
+    this.end_d = this.range.value.start!
+    this.end_d.setDate(this.end_d.getDate() + 1)
     console.log("FETCHING NEW VALS")
 
-    // this.postings = await this.BQS.getPostingsBatch(this.params.accountId, 0, 100, start!, end_d)
-    this.balances = await this.BQS.getBalance(this.params.accountId, 0, 100, start!)
 
-
-
-    var start_dx = null
-    var end_dx = null
-    if (start! > end_d) {
-      start_dx = end_d
-      end_dx = start!
-    }
-    else {
-      end_dx = end_d
-      start_dx = start!
-    }
-
-    this.postings = await this.BQS.getPostingsBatch(this.params.accountId, 0, 100, start_dx, end_dx)
-
+    this.postings = await this.BQS.getPostingsBatch(this.params.accountId, 0, 100, this.start_d!, this.end_d)
+    this.balances = await this.BQS.getBalance(this.params.accountId, 0, 100, this.start_d!, this.end_d)
     console.log(this.balances)
     console.log(this.postings)
     // this.accountDetails = await this.BQS.getAccountDetail(this.params.accountId)
 
   }
+  start_d: Date | undefined;
+  end_d: Date | undefined;
   params: any;
   postings: any;
   accountDetails: any;
@@ -177,17 +163,16 @@ export class AccountDetailsComponent implements OnInit {
 
   }
   async ngOnInit() {
-    var start = this.range.value.start
-    start!.setDate(start!.getDate() - 7)
-    const end_d = new Date()
+    this.end_d = this.range.value.start!
     this.params = await firstValueFrom(this.activatedRoute.params)
-
-    this.postings = await this.BQS.getPostingsBatch(this.params.accountId, 0, 100, start!, end_d)
-    this.balances = await this.BQS.getBalance(this.params.accountId, 0, 100, end_d)
     this.accountDetails = await this.BQS.getAccountDetail(this.params.accountId)
+    this.start_d = new Date(this.accountDetails.opening_timestamp * 1000)
+    this.start_d.setDate(this.start_d.getDate() - 14)
 
 
 
+    this.postings = await this.BQS.getPostingsBatch(this.params.accountId, 0, 100, this.start_d, this.end_d)
+    this.balances = await this.BQS.getBalance(this.params.accountId, 0, 100, this.start_d, this.end_d)
     this.titleService.setTitle(`${this.accountDetails.product_id} - ${this.params.accountId}`)
     this.accountDetails = JSON.stringify(this.accountDetails, null, 4)
     // console.log(this.postings)
