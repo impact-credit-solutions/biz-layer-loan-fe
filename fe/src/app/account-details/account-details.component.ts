@@ -35,10 +35,26 @@ export class AccountDetailsComponent implements OnInit {
     var start = this.range.value.start
     // start!.setDate(start!.getDate() - 7)
     const end_d = new Date()
+    end_d.setDate(start!.getDate() + 1)
     console.log("FETCHING NEW VALS")
 
     // this.postings = await this.BQS.getPostingsBatch(this.params.accountId, 0, 100, start!, end_d)
     this.balances = await this.BQS.getBalance(this.params.accountId, 0, 100, start!)
+
+
+
+    var start_dx = null
+    var end_dx = null
+    if (start! > end_d) {
+      start_dx = end_d
+      end_dx = start!
+    }
+    else {
+      end_dx = end_d
+      start_dx = start!
+    }
+
+    this.postings = await this.BQS.getPostingsBatch(this.params.accountId, 0, 100, start_dx, end_dx)
 
     console.log(this.balances)
     console.log(this.postings)
