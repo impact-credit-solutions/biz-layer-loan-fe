@@ -14,7 +14,7 @@ export class BalanceQueryService {
 
   async getBalance(accountId: string, page: number, size: number, fromTime: Date, toTime: Date) {
     return await lastValueFrom(this.http.get(
-      this.baseUrl + "/v2/accounts/" + accountId + '/balance/live', { params: { page, size, fromTime: fromTime.toISOString(), toTime: toTime.toISOString() } }
+      this.baseUrl + "/v2/accounts/" + accountId + '/balance/live', { params: { page, size, effectiveTime: toTime.toISOString()} }
     ))
   }
   async getPostingsByBatch(batchId: string) {

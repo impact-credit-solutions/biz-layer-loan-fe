@@ -139,7 +139,13 @@ export class AccountDetailsComponent implements OnInit {
         this.clipboard.copy(e.data.batch_id)
       }
     },
-    { field: "timestamp", width: 200, valueGetter: (e) => { return e.data.request_id.split('_')[e.data.request_id.split('_').length - 1] } },
+
+    {
+      field: "timestamp", width: 200, valueGetter: (e) => {
+
+        return e.data.postings_instructions[0].postings[0].value_timestamp
+      }
+    },
     {
       field: "request_id", pinned: 'left', width: 350, headerName: "Request Batch ID", onCellClicked: (e) => {
         // console.log(e.data)
@@ -219,5 +225,5 @@ function stringToColour(str: string) {
     const value = (hash >> (i * 8)) & 0xff
     colour += value.toString(16).padStart(2, '0')
   }
-  return colour + "44"
+  return colour + "20"
 }
