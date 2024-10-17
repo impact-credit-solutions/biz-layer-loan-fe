@@ -18,11 +18,11 @@
 
     padding: 2px;
     flex-grow: initial;
-    min-height: 100vh;
+    height: 100%;
     width: 100%;
     justify-content: center;
     justify-items: center;
- 
+
 }
 
 footer {}
